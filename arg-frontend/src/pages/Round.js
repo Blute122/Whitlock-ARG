@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import StageDisplay from '../components/StageDisplay';
 import CryptoJS from 'crypto-js';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
+const API_URL = process.env.REACT_APP_API_URL || (window.location.port === '3000' ? `http://${window.location.hostname}:5000` : '');
 
 const Round = ({ session, onProgress }) => {
   const { n } = useParams();

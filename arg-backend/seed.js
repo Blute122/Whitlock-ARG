@@ -35,7 +35,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/witlock")
     const stages = [
       { 
         stageNumber: 1, 
-        correctAnswer: "saveme", 
+        correctAnswer: "savehumanity", 
         maxSlots: 999,
         blog: {
           title: "Intrusion Analysis: Node Cluster Alpha",
@@ -63,7 +63,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/witlock")
       },
       { 
         stageNumber: 3, 
-        correctAnswer: "shadows", 
+        correctAnswer: "illusion", 
         maxSlots: 999,
         blog: {
           title: "Social Graph Manipulation",
@@ -77,7 +77,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/witlock")
       },
       { 
         stageNumber: 4, 
-        correctAnswer: "hidden", 
+        correctAnswer: "mirage", 
         maxSlots: 999,
         blog: {
           title: "Data Payload Embedding",
@@ -91,7 +91,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/witlock")
       },
       { 
         stageNumber: 5, 
-        correctAnswer: "vault", 
+        correctAnswer: "phantom", 
         maxSlots: 999,
         blog: {
           title: "Physical Topography Breach",
@@ -105,7 +105,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/witlock")
       },
       { 
         stageNumber: 6, 
-        correctAnswer: "truth", 
+        correctAnswer: "whisper", 
         maxSlots: 999,
         blog: {
           title: "Temporal Discrepancy Event",
@@ -119,7 +119,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/witlock")
       },
       { 
         stageNumber: 7, 
-        correctAnswer: "whitlock", 
+        correctAnswer: "awaken", 
         maxSlots: 999,
         blog: {
           title: "System-Wide Typographical Errors",

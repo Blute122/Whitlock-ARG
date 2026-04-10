@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -220,7 +221,17 @@ app.get('/api/diary/:n', async (req, res) => {
 });
 
 // ==========================================
-// 4. START THE SERVER
+// 4. STATIC FRONTEND SERVING FOR HOST TEST
+// ==========================================
+const buildPath = path.join(__dirname, '../arg-frontend/build');
+app.use(express.static(buildPath));
+
+app.use((req, res) => {
+  res.sendFile(path.join(buildPath, 'index.html'));
+});
+
+// ==========================================
+// 5. START THE SERVER
 // ==========================================
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

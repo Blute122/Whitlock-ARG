@@ -42,12 +42,12 @@ const Awaken = ({ session }) => {
     const input = currentInput.trim().toLowerCase();
     const teamName = session?.teamName?.trim().toLowerCase() || 'unknown';
 
-    if (input === 'whitlock') {
+    if (input === teamName) {
       setMessage("That's not who you are.");
       setCurrentInput('');
       return;
     }
-    if (input === teamName) {
+    if (input === 'whitlock') {
       triggerFinalSequence();
       return;
     }
