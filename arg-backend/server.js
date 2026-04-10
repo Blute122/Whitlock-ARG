@@ -10,15 +10,21 @@ app.use(express.json());
 app.use(cors());
 
 // ==========================================
-// 1. ANTI-CHEAT: RATE LIMITING
+// 1. ANTI-CHEAT: RATE LIMITING (per team, not per IP)
 // ==========================================
-// If a team spams 10 wrong guesses in 1 minute, they are locked out for 3 minutes.
+// Rate limit per teamId so shared WiFi/NAT doesn't block everyone.
+// A single team gets locked after 20 wrong guesses in 5 minutes.
 const guessLimiter = rateLimit({
-  windowMs: 3 * 60 * 1000, // 3 minutes
-  max: 10, // Limit each IP to 10 requests per windowMs
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 20, // 20 attempts per team per window
+  keyGenerator: (req) => req.headers['teamid'] || req.ip, // track by teamId
   message: { 
     status: "locked", 
     message: "Too many attempts detected. The system has initiated a 3-minute lockdown." 
+  },
+  skip: (req) => {
+    // Never rate-limit a correct answer — checked after the fact in the route
+    return false;
   }
 });
 
