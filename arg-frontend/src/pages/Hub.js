@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Hub = ({ session }) => {
+const Hub = ({ session, onLogout }) => {
   const navigate = useNavigate();
 
   const totalStages = 7;
@@ -9,7 +9,13 @@ const Hub = ({ session }) => {
 
   return (
     <div style={{ backgroundColor: '#0d0d0d', color: '#c9c9c0', minHeight: '100vh', padding: '50px 20px', fontFamily: '"Courier New", Courier, monospace' }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative' }}>
+        <button 
+          onClick={onLogout}
+          style={{ position: 'absolute', top: '-20px', right: '0', background: 'none', border: '1px solid #4CAF50', color: '#4CAF50', padding: '5px 15px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'inherit', fontSize: '14px' }}
+        >
+          DISCONNECT
+        </button>
         <h1 style={{ textAlign: 'center', marginBottom: '50px', letterSpacing: '3px' }}>INCIDENT DATABASE</h1>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>

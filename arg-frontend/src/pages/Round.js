@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import StageDisplay from '../components/StageDisplay';
+import CryptoJS from 'crypto-js';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
 
@@ -37,7 +38,25 @@ const Round = ({ session, onProgress }) => {
       axios.get(`${API_URL}/api/diary/${stageNumber}`, {
         headers: { teamid: session.teamId, sessiontoken: session.sessionToken }
       })
-      .then(res => setDiaryContent(res.data.diary))
+      .then(res => {
+        if (res.data.payload && res.data.iv) {
+          try {
+            const key = CryptoJS.enc.Hex.parse(session.sessionToken);
+            const ivParsed = CryptoJS.enc.Hex.parse(res.data.iv);
+            const decrypted = CryptoJS.AES.decrypt(
+              { ciphertext: CryptoJS.enc.Hex.parse(res.data.payload) },
+              key,
+              { iv: ivParsed, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+            );
+            const utf8String = decrypted.toString(CryptoJS.enc.Utf8);
+            setDiaryContent(JSON.parse(utf8String));
+          } catch (e) {
+            console.error("Decryption failed:", e);
+          }
+        } else {
+          setDiaryContent(res.data.diary);
+        }
+      })
       .catch(console.error);
     }
   }, [stageNumber, session, isSolved, navigate]);
@@ -80,7 +99,20 @@ const Round = ({ session, onProgress }) => {
     }
   };
 
-  const theme = { bg: '#FAFAFA', navBg: '#FFFFFF', text: '#333333', font: '"Helvetica Neue", Helvetica, Arial, sans-serif', border: '#EAEAEA', accent: '#0066CC', bio: "Security researcher. Documenting incidents before they are buried." };
+  const getTheme = () => {
+    switch (true) {
+      case (stageNumber <= 2):
+        return { bg: '#FAFAFA', navBg: '#FFFFFF', text: '#333333', font: '"Helvetica Neue", Helvetica, Arial, sans-serif', border: '#EAEAEA', accent: '#0066CC', bio: "Security researcher. Documenting incidents before they are buried." };
+      case (stageNumber >= 3 && stageNumber <= 5):
+        return { bg: '#F4F1EA', navBg: '#EFEBE1', text: '#2C2C2C', font: 'Georgia, serif', border: '#DCD6C8', accent: '#8B0000', bio: "Some file data appears to be altered. I am maintaining hard backups offline." };
+      case (stageNumber === 6):
+        return { bg: '#1A1A1A', navBg: '#0F0F0F', text: '#E0E0E0', font: '"Courier New", Courier, monospace', border: '#333333', accent: '#FF3333', bio: "who is looking at this? they are in the network." };
+      default:
+        return { bg: '#000000', navBg: '#000000', text: '#00FF00', font: '"Courier New", Courier, monospace', border: '#00FF00', accent: '#00FF00', bio: "SYSTEM CORRUPTED. A TRACE REMAINS." };
+    }
+  };
+
+  const theme = getTheme();
 
   if (isFull) return <div style={{textAlign: 'center', marginTop: '20vh', color: 'red', fontFamily: 'monospace'}}><h1>403 THREAD ARCHIVED</h1></div>;
 

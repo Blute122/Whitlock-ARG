@@ -124,7 +124,7 @@ app.post('/api/submit', guessLimiter, async (req, res) => {
     const updatedStage = await Stage.findOneAndUpdate(
       { stageNumber: stageNumber, slotsTaken: { $lt: stage.maxSlots } },
       { $inc: { slotsTaken: 1 } },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     // C. The Graveyard Redirect (No slots left)
@@ -142,7 +142,7 @@ app.post('/api/submit', guessLimiter, async (req, res) => {
         currentStage: stageNumber + 1,
         $addToSet: { diaryUnlocked: stageNumber } 
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     return res.status(200).json({ 
@@ -199,10 +199,20 @@ app.get('/api/diary/:n', async (req, res) => {
     const stage = await Stage.findOne({ stageNumber: n });
     if (!stage) return res.status(404).json({ status: "error", message: "Stage not found." });
 
+    // Encrypt the diary data using AES-256-CBC
+    // The session token is 32 bytes (64 hex characters)
+    const key = Buffer.from(reqSessionToken, 'hex');
+    const iv = crypto.randomBytes(16);
+    
+    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+    let encrypted = cipher.update(JSON.stringify(stage.diary), 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+
     res.status(200).json({
       status: "success",
       stageNumber: stage.stageNumber,
-      diary: stage.diary
+      payload: encrypted,
+      iv: iv.toString('hex')
     });
   } catch (err) {
     res.status(500).json({ status: "error", message: "Internal server anomaly." });

@@ -11,12 +11,17 @@ function App() {
     return saved ? JSON.parse(saved) : null;
   });
 
+  const handleLogout = () => {
+    localStorage.removeItem('witlock_session');
+    setSession(null);
+  };
+
   if (!session) return <Login onLogin={setSession} />;
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Hub session={session} />} />
+        <Route path="/" element={<Hub session={session} onLogout={handleLogout} />} />
         <Route path="/round/:n" element={<Round session={session} onProgress={setSession} />} />
         <Route path="/awaken" element={<Awaken session={session} />} />
       </Routes>
