@@ -8,7 +8,7 @@ const StageDisplay = ({ stageContent, theme }) => {
     <article>
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
         <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: theme.border, overflow: 'hidden' }}>
-            <img src={"https://via.placeholder.com/48/cccccc/ffffff?text=R"} alt="Author thumbnail" style={{ width: '100%' }} />
+            <img src={"/profile_pic.png"} alt="Author thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div>
           <div style={{ fontWeight: 'bold', fontSize: '16px' }}>Incident Report</div>
