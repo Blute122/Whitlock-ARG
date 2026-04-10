@@ -166,6 +166,9 @@ The UI progressively degrades as players advance:
 
 ## 👥 Built by
 
-**Blute122** / forked from **kushpo357/Whitlock-ARG**
+| GitHub | Role |
+|--------|------|
+| [Blute122](https://github.com/Blute122) | Development, Deployment |
+| [kushpo357](https://github.com/kushpo357) | Co-creator, Game Design |
 
 *Built for a live cybersecurity ARG event — April 2026*
