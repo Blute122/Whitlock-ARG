@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Login from './components/Login';
 import Hub from './pages/Hub';
 import Round from './pages/Round';
@@ -16,10 +17,16 @@ function App() {
     setSession(null);
   };
 
-  if (!session) return <Login onLogin={setSession} />;
+  if (!session) return (
+    <>
+      <Analytics />
+      <Login onLogin={setSession} />
+    </>
+  );
 
   return (
     <BrowserRouter>
+      <Analytics />
       <Routes>
         <Route path="/" element={<Hub session={session} onLogout={handleLogout} />} />
         <Route path="/round/:n" element={<Round session={session} onProgress={setSession} />} />
